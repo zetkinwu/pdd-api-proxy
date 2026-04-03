@@ -1,1 +1,17 @@
-
+{
+  "name": "pdd-api-proxy",
+  "version": "1.0.0",
+  "description": "拼多多API代理服务",
+  "main": "api/index.js",
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "crypto": "^1.0.1",
+    "querystring": "^0.2.1"
+  },
+  "devDependencies": {
+    "vercel": "^32.0.0"
+  }
+}
