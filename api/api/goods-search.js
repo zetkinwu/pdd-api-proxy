@@ -1,15 +1,12 @@
 // 拼多多商品搜索API代理
-const crypto = require('crypto');
-const querystring = require('querystring');
+const crypto = require('node:crypto');
 
-// 拼多多开放平台配置
 const PDD_CONFIG = {
   apiUrl: 'https://gw-api.pinduoduo.com/api/router',
   clientId: process.env.PDD_CLIENT_ID,
   clientSecret: process.env.PDD_CLIENT_SECRET
 };
 
-// 生成签名
 function generateSign(params, clientSecret) {
   const sortedKeys = Object.keys(params).sort();
   let signStr = clientSecret;
@@ -20,7 +17,14 @@ function generateSign(params, clientSecret) {
   return crypto.createHash('md5').update(signStr).digest('hex').toUpperCase();
 }
 
-// 构建API请求参数
+function buildFormData(params) {
+  const pairs = [];
+  for (const [key, value] of Object.entries(params)) {
+    pairs.push(`${encodeURIComponent(key)}=${encodeURIComponent(value)}`);
+  }
+  return pairs.join('&');
+}
+
 function buildApiParams(type, data) {
   const timestamp = Math.floor(Date.now() / 1000);
   const params = {
@@ -55,7 +59,7 @@ module.exports = async (req, res) => {
 
     if (!PDD_CONFIG.clientId || !PDD_CONFIG.clientSecret) {
       return res.status(500).json({
-        error: 'API配置错误',
+        error: 'API配置错误：缺少client_id或client_secret',
         success: false
       });
     }
@@ -73,7 +77,7 @@ module.exports = async (req, res) => {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
       },
-      body: querystring.stringify(apiParams)
+      body: buildFormData(apiParams)
     });
 
     const data = await response.json();
