@@ -1,9 +1,0 @@
-{
-  "name": "pdd-api-functions",
-  "version": "1.0.0",
-  "description": "拼多多API云函数",
-  "dependencies": {
-    "crypto": "^1.0.1",
-    "querystring": "^0.2.1"
-  }
-}
